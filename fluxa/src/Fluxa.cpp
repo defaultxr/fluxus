@@ -37,6 +37,8 @@ m_LeftComp(jack->GetSamplerate()),
 m_RightComp(jack->GetSamplerate())
 {
 	WaveTable::WriteWaves();
+    CryptoInit();
+
  	jack->SetCallback(Run,(void*)this);
 
 	//PortAudioClient* Audio=PortAudioClient::Get();
@@ -279,8 +281,8 @@ void Fluxa::Process(unsigned int BufSize)
 	}
 
 	m_Graph.Process(BufSize,m_LeftBuffer,m_RightBuffer);
-	m_LeftEq.Process(BufSize,m_LeftBuffer);
-	m_RightEq.Process(BufSize,m_RightBuffer);
+//	m_LeftEq.Process(BufSize,m_LeftBuffer);
+//	m_RightEq.Process(BufSize,m_RightBuffer);
 
 	// panning
 	float leftpan=1,rightpan=1;

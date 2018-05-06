@@ -17,10 +17,13 @@
 #include "Modules.h"
 #include <stdlib.h>
 #include <math.h>
+#include <openssl/evp.h>
+#include <openssl/aes.h>
 
 using namespace std;
 
 static float SmallNumber = (1.0 / 4294967295.0);   // Very small amount (Denormal Fix)
+
 
 float RandRange(float L, float H)
 {
@@ -94,6 +97,53 @@ void MovingHardClip(Sample &buf, const Sample &level)
 		buf[i]*=1/l;
 	}
 }
+
+void CryptoInit()
+{
+	/*
+EVP_CIPHER_CTX *e_ctx = EVP_CIPHER_CTX_new();
+    cerr<<"cryptoinit"<<endl;
+    string salt_data("salt");
+    string key_data("key");
+    unsigned char key[32], iv[32];
+
+    EVP_BytesToKey(EVP_aes_256_cbc(), EVP_sha1(),
+                   (unsigned char*)salt_data.c_str(),
+                   (unsigned char*)key_data.c_str(), key_data.length(), 1,
+                   key,
+                   iv);
+    cerr<<1<<endl;
+    EVP_CIPHER_CTX_init(&e_ctx);
+    cerr<<2<<endl;
+    EVP_EncryptInit_ex(&e_ctx, EVP_aes_256_ecb(), NULL, key, iv);
+    cerr<<"cryptoinit done"<<endl;
+*/}
+
+char enc_dati[4096];
+char enc_dato[4096];
+
+void CryptoDistort(Sample &buf)
+{
+ /*   unsigned int byteslen = buf.GetLength();
+
+    for (unsigned int i=0; i<buf.GetLength(); i++)
+    {
+        enc_dati[i]=buf[i]*127;
+    }
+
+    int c_len=byteslen+AES_BLOCK_SIZE;
+    EVP_EncryptUpdate(&e_ctx,(unsigned char*)enc_dato, &c_len,
+                             (unsigned char*)enc_dati, byteslen);
+    int f_len = 0;
+    EVP_EncryptFinal_ex(&e_ctx,(unsigned char*)enc_dato+c_len, &f_len);
+
+    for (unsigned int i=0; i<buf.GetLength(); i++)
+    {
+        buf[i]=enc_dato[i]/127.0f;
+    }
+*/
+}
+
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -816,10 +866,20 @@ void Delay::Process(unsigned int BufSize, Sample &In, Sample &DelayCV, Sample &F
 
 void Delay::Process(unsigned int BufSize, Sample &In, Sample &Out)
 {
+    if (m_Delay>MAX_DELAYTIME) m_Delay=MAX_DELAYTIME;
+    if (m_Delay<0) m_Delay=0;
+
 	unsigned int delay=(unsigned int)(m_SampleRate*m_Delay);
+
+    if (m_Feedback>0.99) m_Feedback=0.99;
+    if (m_Feedback<0) m_Feedback=0;
 
 	if (delay==0)
 	{
+        for (unsigned int n=0; n<BufSize; n++)
+        {
+            Out[n]=In[n];
+        }
 		return;
 	}
 

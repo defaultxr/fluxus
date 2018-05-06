@@ -369,6 +369,11 @@ void EffectNode::Process(unsigned int bufsize)
                 MovingDistort(m_Output, GetInput(1));
             }
         }
+        else if (m_Type==CRYPTODISTORT)
+        {
+            m_Output=GetInput(0);
+            CryptoDistort(m_Output);
+        }
         else if (ChildExists(2))
         {
             switch (m_Type)
@@ -474,7 +479,7 @@ void XFadeNode::Process(unsigned int bufsize)
 					for (unsigned int n=0; n<bufsize; n++) m_Output[n]=value;
 				}
 				else
-				{
+			{
 					float v0 = GetChild(0)->GetValue();
 					float v1 = GetChild(1)->GetValue();
 
