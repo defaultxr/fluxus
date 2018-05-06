@@ -1,4 +1,10 @@
 Fluxus : (C) 2008 Dave Griffiths : dave at pawfal dot org : www.pawfal.org
+2018 Thomas Hoecedez : thomas at blenderlab dot fr : www.blenderlab.fr
+
+0.19 
+
+* update openSSL declaration
+* update some includes
 
 0.18
 
