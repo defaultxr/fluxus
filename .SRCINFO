@@ -1,0 +1,16 @@
+pkgbase = fluxus-git
+	pkgdesc = A Live coding environment for Visual Artists.
+	pkgver = r2.0d
+	pkgrel = 1
+	url = https://github.com/AsTHrO/fluxus.git
+	arch = i686
+	arch = x86_64
+	license = GPL
+	makedepends = git
+	depends = scons
+	conflicts = fluxus
+	source = fluxus-git::git+https://github.com/AsTHrO/fluxus.git
+	md5sums = SKIP
+
+pkgname = fluxus-git
+
